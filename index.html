@@ -685,16 +685,16 @@
                       </h5>
                     </div>
                     <div>
-                      <form action="https://mailto:dhruv12kothiya@gmail.com" method="POST" enctype="multipart/form-data">
+                      <!-- <form action="" method="POST"> -->
                         <div class="row">
                           <div class="col-md-12 mb-3">
                             <div class="form-group">
-                              <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+                              <input type="text" name="userName" class="form-control" id="userName" placeholder="Your Name" required>
                             </div>
                           </div>
                           <div class="col-md-12 mb-3">
                             <div class="form-group">
-                              <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+                              <input type="email" class="form-control" name="userEmail" id="userEmail" placeholder="Your Email" required>
                             </div>
                           </div>
                           <div class="col-md-12 mb-3">
@@ -704,7 +704,7 @@
                           </div>
                           <div class="col-md-12">
                             <div class="form-group">
-                              <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+                              <textarea class="form-control" name="content" id="content" rows="5" placeholder="Message" required></textarea>
                             </div>
                           </div>
                           <!-- <div class="col-md-12 text-center my-3">
@@ -713,10 +713,11 @@
                             <div class="sent-message">Your message has been sent. Thank you!</div>
                           </div> -->
                           <div class="col-md-12 text-center">
-                            <button type="submit" class="button button-a button-big button-rouded">Send Message</button>
+                            <!-- <button type="submit" class="button button-a button-big button-rouded">Send Message</button> -->
+                            <button name="submit" class="button button-a button-big button-rouded" onClick="sendContact();">Send Message</button>
                           </div>
                         </div>
-                      </form>
+                      <!-- </form> -->
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -753,8 +754,9 @@
       </div>
     </section><!-- End Contact Section -->
 
-  </main><!-- End #main -->
-
+  </main>
+  <!-- End #main -->
+﻿
   <!-- ======= Footer ======= -->
   <footer>
     <div class="container">
@@ -787,6 +789,59 @@
   <script src="assets/vendor/purecounter/purecounter.js"></script>
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
   <script src="assets/vendor/typed.js/typed.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
+  <script>
+  function sendContact() {
+    var valid;	
+    valid = validateContact();
+    if(valid) {
+      jQuery.ajax({
+      url: "contact_mail.php",
+      data:'userName='+$("#userName").val()+'&userEmail='+$("#userEmail").val()+'&subject='+$("#subject").val()+'&content='+$(content).val(),
+      type: "POST",
+      success:function(data){
+      $("#mail-status").html(data);
+      },
+      error:function (){}
+      });
+    }
+  }
+
+  function validateContact() {
+    var valid = true;	
+    $(".demoInputBox").css('background-color','');
+    $(".info").html('');
+    
+    if(!$("#userName").val()) {
+      $("#userName-info").html("(required)");
+      $("#userName").css('background-color','#FFFFDF');
+      valid = false;
+    }
+    if(!$("#userEmail").val()) {
+      $("#userEmail-info").html("(required)");
+      $("#userEmail").css('background-color','#FFFFDF');
+      valid = false;
+    }
+    if(!$("#userEmail").val().match(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/)) {
+      $("#userEmail-info").html("(invalid)");
+      $("#userEmail").css('background-color','#FFFFDF');
+      valid = false;
+    }
+    if(!$("#subject").val()) {
+      $("#subject-info").html("(required)");
+      $("#subject").css('background-color','#FFFFDF');
+      valid = false;
+    }
+    if(!$("#content").val()) {
+      $("#content-info").html("(required)");
+      $("#content").css('background-color','#FFFFDF');
+      valid = false;
+    }
+    
+    return valid;
+  }
+  </script>
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
